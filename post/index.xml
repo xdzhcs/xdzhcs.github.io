@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on xdzhcs</title>
-    <link>http://xdzhcs.github.com/post/</link>
+    <link>http://xdzhcs.github.io/post/</link>
     <description>Recent content in Posts on xdzhcs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 24 Aug 2016 21:13:10 +0800</lastBuildDate>
-    <atom:link href="http://xdzhcs.github.com/post/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://xdzhcs.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>first</title>
-      <link>http://xdzhcs.github.com/post/first/</link>
+      <link>http://xdzhcs.github.io/post/first/</link>
       <pubDate>Wed, 24 Aug 2016 21:13:10 +0800</pubDate>
       
-      <guid>http://xdzhcs.github.com/post/first/</guid>
+      <guid>http://xdzhcs.github.io/post/first/</guid>
       <description>
 
 &lt;h3 id=&#34;hello-hugo&#34;&gt;Hello Hugo&lt;/h3&gt;
