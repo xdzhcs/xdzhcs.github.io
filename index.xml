@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>xdzhcs</title>
-    <link>http://tonybai.com/</link>
+    <link>http://xdzhcs.github.com/</link>
     <description>Recent content on xdzhcs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 24 Aug 2016 21:13:10 +0800</lastBuildDate>
-    <atom:link href="http://tonybai.com/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://xdzhcs.github.com/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>first</title>
-      <link>http://tonybai.com/post/first/</link>
+      <link>http://xdzhcs.github.com/post/first/</link>
       <pubDate>Wed, 24 Aug 2016 21:13:10 +0800</pubDate>
       
-      <guid>http://tonybai.com/post/first/</guid>
+      <guid>http://xdzhcs.github.com/post/first/</guid>
       <description>
 
 &lt;h3 id=&#34;hello-hugo&#34;&gt;Hello Hugo&lt;/h3&gt;
@@ -29,10 +29,10 @@
     
     <item>
       <title>about</title>
-      <link>http://tonybai.com/about/</link>
+      <link>http://xdzhcs.github.com/about/</link>
       <pubDate>Wed, 24 Aug 2016 21:11:56 +0800</pubDate>
       
-      <guid>http://tonybai.com/about/</guid>
+      <guid>http://xdzhcs.github.com/about/</guid>
       <description>&lt;p&gt;###about&lt;/p&gt;
 </description>
     </item>
