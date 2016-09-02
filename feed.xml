@@ -5,35 +5,31 @@
     <link>/</link>
     <description>Recent content on xdzhcs</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <language>zh-CN</language>
     <lastBuildDate>Wed, 24 Aug 2016 21:13:10 +0800</lastBuildDate>
-    <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/feed/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>first</title>
+      <title>ä½ å¥½,hugo</title>
       <link>/post/first/</link>
       <pubDate>Wed, 24 Aug 2016 21:13:10 +0800</pubDate>
       
       <guid>/post/first/</guid>
       <description>
 
-&lt;h3 id=&#34;hello-hugo&#34;&gt;Hello Hugo&lt;/h3&gt;
+&lt;h3 id=&#34;ä½ å¥½-hugo&#34;&gt;ä½ å¥½,hugo&lt;/h3&gt;
 
-&lt;ol&gt;
-&lt;li&gt;aaa&lt;/li&gt;
-&lt;li&gt;bbb&lt;/li&gt;
-&lt;li&gt;ccc&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;è¿™æ˜¯æˆ‘çš„ç¬¬ä¸€ç¯‡æ–‡ç« ï¼Œå¥½å§ï¼Œæµ‹è¯•æ–‡ç« ã€‚&lt;/p&gt;
 </description>
     </item>
     
     <item>
-      <title>about</title>
+      <title>ï¿½ï¿½ï¿½ï¿½</title>
       <link>/about/</link>
       <pubDate>Wed, 24 Aug 2016 21:11:56 +0800</pubDate>
       
       <guid>/about/</guid>
-      <description>&lt;p&gt;###about&lt;/p&gt;
+      <description>&lt;p&gt;ÕâÊÇÎÒÓÃHugo´î½¨µÄµÚÒ»¸ö²©¿Í£¬¶à¶àÖ¸½Ì¡£&lt;/p&gt;
 </description>
     </item>
     
