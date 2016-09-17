@@ -2,17 +2,17 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>你好,hugo - xdzhcs</title>
+  <title>LeetCode 2 Add Two Numbers - xdzhcs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="你好,hugo 这是我的第一篇文章，好吧，测试文章。">
+  <meta name="description" content="题目 https://leetcode.com/problems/add-two-numbers/ &gt;You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list. Input: (2 -&gt; 4 -&gt; 3) &#43; (5 -&gt; 6 -&gt; 4) Output: 7 -&gt; 0 -&gt; 8 题意 思路 代码 /** * Definition for singly-linked list.">
   <meta name="author" content="xdzhcs">
-  <meta itemprop="name" content="你好,hugo - xdzhcs">
-  <meta itemprop="description" content="你好,hugo 这是我的第一篇文章，好吧，测试文章。">
+  <meta itemprop="name" content="LeetCode 2 Add Two Numbers - xdzhcs">
+  <meta itemprop="description" content="题目 https://leetcode.com/problems/add-two-numbers/ &gt;You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list. Input: (2 -&gt; 4 -&gt; 3) &#43; (5 -&gt; 6 -&gt; 4) Output: 7 -&gt; 0 -&gt; 8 题意 思路 代码 /** * Definition for singly-linked list.">
   <meta itemprop="image" content="/img/author.jpg">
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@xdzhcs" />
-  <meta name="twitter:title" content="你好,hugo - xdzhcs" />
+  <meta name="twitter:title" content="LeetCode 2 Add Two Numbers - xdzhcs" />
   
   <meta name="twitter:description" content="">
   
@@ -63,7 +63,7 @@
 	<article itemprop="articleBody">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-      <a href="/post/first/" title="你好,hugo" itemprop="url">你好,hugo</a>
+      <a href="/post/LeetCode-2-Add-Two-Numbers/" title="LeetCode 2 Add Two Numbers" itemprop="url">LeetCode 2 Add Two Numbers</a>
   </h1>
   <p class="article-author">By
     
@@ -71,7 +71,7 @@
     
   </p>
   <p class="article-time">
-    <time datetime="2016-08-24 21:13:10 &#43;0800 CST" itemprop="datePublished">2016年08月24日</time>
+    <time datetime="2016-09-17 20:52:05 &#43;0800 CST" itemprop="datePublished">2016年09月17日</time>
   </p>
 </header>
 
@@ -79,9 +79,68 @@
     
     
 
-<h3 id="你好-hugo">你好,hugo</h3>
+<h3 id="题目">题目</h3>
 
-<p>这是我的第一篇文章，好吧，测试文章。</p>
+<p><a href="https://leetcode.com/problems/add-two-numbers/">https://leetcode.com/problems/add-two-numbers/</a>
+&gt;You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+Input: (2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+Output: 7 -&gt; 0 -&gt; 8</p>
+
+<h3 id="题意">题意</h3>
+
+<h3 id="思路">思路</h3>
+
+<h3 id="代码">代码</h3>
+
+<pre><code>/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int flag=0;
+        int val=l1.val+l2.val+flag;
+        ListNode l3=new ListNode(val%10);
+        ListNode res=l3;
+        flag=val/10;
+        l1=l1.next;
+        l2=l2.next;
+        //ListNode next=l3.next;
+        while(l1!=null&amp;&amp;l2!=null){
+            int value=l1.val+l2.val+flag;
+            //next=new ListNode(val%10);
+            l3.next=new ListNode(value%10);
+            flag=value/10;
+            l1=l1.next;
+            l2=l2.next;
+            //next=next.next;
+            l3=l3.next;
+        }
+        while(l1!=null){
+            int value=l1.val+flag;
+            l3.next=new ListNode(value%10);
+            flag=value/10;
+            l1=l1.next;
+            l3=l3.next;
+        }
+        while(l2!=null){
+            int value=l2.val+flag;
+            l3.next=new ListNode(value%10);
+            flag=value/10;
+            l2=l2.next;
+            l3=l3.next;
+        }
+        if(flag!=0){
+            l3.next=new ListNode(flag);
+        }
+        return res;
+    }
+}
+</code></pre>
 
 	</div>
   <footer class="article-footer clearfix">
@@ -90,13 +149,7 @@
 <div class="article-tags">
   <span></span>
   
-  <a href="/tags/%E9%9A%8F%E7%AC%94">随笔</a>
-  
-  <a href="/tags/%E7%81%B5%E6%84%9F">灵感</a>
-  
-  <a href="/tags/%E7%AC%94%E8%AE%B0">笔记</a>
-  
-  <a href="/tags/android">android</a>
+  <a href="/tags/leetcode">LeetCode</a>
   
 </div>
 
@@ -107,18 +160,14 @@
 <div class="article-categories">
   <span></span>
   
-  <a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0">读书笔记</a>
-  
-  <a class="article-category-link" href="/categories/%E6%80%9D%E8%80%83%E6%84%9F%E6%82%9F">思考感悟</a>
-  
-  <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0">技术文章</a>
+  <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF">学习之路</a>
   
 </div>
 
 
 
   <div class="article-share" id="share">
-    <div data-url="/post/first/" data-title="你好,hugo" data-tsina="" class="share clearfix">
+    <div data-url="/post/LeetCode-2-Add-Two-Numbers/" data-title="LeetCode 2 Add Two Numbers" data-tsina="" class="share clearfix">
     </div>
   </div>
 </footer>

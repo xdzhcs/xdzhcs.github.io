@@ -2,17 +2,17 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>你好,hugo - xdzhcs</title>
+  <title>LeetCode 1 Two Sum - xdzhcs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="你好,hugo 这是我的第一篇文章，好吧，测试文章。">
+  <meta name="description" content="题目 https://leetcode.com/problems/two-sum/ &gt;Given an array of integers, return indices of the two numbers such that they add up to a specific target. You may assume that each input would have exactly one solution. Example: Given nums = [2, 7, 11, 15], target = 9, Because nums[0] &#43; nums[1] = 2 &#43; 7 = 9, return [0, 1]. UPDATE (2016/2/13): The return format had been changed to zero-based indices. Please">
   <meta name="author" content="xdzhcs">
-  <meta itemprop="name" content="你好,hugo - xdzhcs">
-  <meta itemprop="description" content="你好,hugo 这是我的第一篇文章，好吧，测试文章。">
+  <meta itemprop="name" content="LeetCode 1 Two Sum - xdzhcs">
+  <meta itemprop="description" content="题目 https://leetcode.com/problems/two-sum/ &gt;Given an array of integers, return indices of the two numbers such that they add up to a specific target. You may assume that each input would have exactly one solution. Example: Given nums = [2, 7, 11, 15], target = 9, Because nums[0] &#43; nums[1] = 2 &#43; 7 = 9, return [0, 1]. UPDATE (2016/2/13): The return format had been changed to zero-based indices. Please">
   <meta itemprop="image" content="/img/author.jpg">
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@xdzhcs" />
-  <meta name="twitter:title" content="你好,hugo - xdzhcs" />
+  <meta name="twitter:title" content="LeetCode 1 Two Sum - xdzhcs" />
   
   <meta name="twitter:description" content="">
   
@@ -63,7 +63,7 @@
 	<article itemprop="articleBody">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-      <a href="/post/first/" title="你好,hugo" itemprop="url">你好,hugo</a>
+      <a href="/post/LeetCode-1-Two-Sum/" title="LeetCode 1 Two Sum" itemprop="url">LeetCode 1 Two Sum</a>
   </h1>
   <p class="article-author">By
     
@@ -71,7 +71,7 @@
     
   </p>
   <p class="article-time">
-    <time datetime="2016-08-24 21:13:10 &#43;0800 CST" itemprop="datePublished">2016年08月24日</time>
+    <time datetime="2016-09-17 20:52:05 &#43;0800 CST" itemprop="datePublished">2016年09月17日</time>
   </p>
 </header>
 
@@ -79,9 +79,37 @@
     
     
 
-<h3 id="你好-hugo">你好,hugo</h3>
+<h3 id="题目">题目</h3>
 
-<p>这是我的第一篇文章，好吧，测试文章。</p>
+<p><a href="https://leetcode.com/problems/two-sum/">https://leetcode.com/problems/two-sum/</a>
+&gt;Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+You may assume that each input would have exactly one solution.
+Example:
+Given nums = [2, 7, 11, 15], target = 9,
+Because nums[0] + nums[1] = 2 + 7 = 9,
+return [0, 1].
+UPDATE (2016/2/13):
+The return format had been changed to zero-based indices. Please read the above updated description carefully.</p>
+
+<h3 id="题意">题意</h3>
+
+<h3 id="思路">思路</h3>
+
+<h3 id="代码">代码</h3>
+
+<pre><code>public class Solution {
+     public int[] twoSum(int[] nums, int target) {
+        for(int i=0;i&lt;nums.length;i++){
+            for(int j=i+1;j&lt;nums.length;j++){
+                if(nums[i]+nums[j]==target){
+                    return new int[]{i,j};
+                }
+            }
+        }
+        return new int[]{0,0};
+    }
+}
+</code></pre>
 
 	</div>
   <footer class="article-footer clearfix">
@@ -90,13 +118,7 @@
 <div class="article-tags">
   <span></span>
   
-  <a href="/tags/%E9%9A%8F%E7%AC%94">随笔</a>
-  
-  <a href="/tags/%E7%81%B5%E6%84%9F">灵感</a>
-  
-  <a href="/tags/%E7%AC%94%E8%AE%B0">笔记</a>
-  
-  <a href="/tags/android">android</a>
+  <a href="/tags/leetcode">LeetCode</a>
   
 </div>
 
@@ -107,18 +129,14 @@
 <div class="article-categories">
   <span></span>
   
-  <a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0">读书笔记</a>
-  
-  <a class="article-category-link" href="/categories/%E6%80%9D%E8%80%83%E6%84%9F%E6%82%9F">思考感悟</a>
-  
-  <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0">技术文章</a>
+  <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF">学习之路</a>
   
 </div>
 
 
 
   <div class="article-share" id="share">
-    <div data-url="/post/first/" data-title="你好,hugo" data-tsina="" class="share clearfix">
+    <div data-url="/post/LeetCode-1-Two-Sum/" data-title="LeetCode 1 Two Sum" data-tsina="" class="share clearfix">
     </div>
   </div>
 </footer>

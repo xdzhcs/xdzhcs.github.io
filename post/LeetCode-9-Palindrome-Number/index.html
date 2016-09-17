@@ -2,17 +2,17 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>你好,hugo - xdzhcs</title>
+  <title>LeetCode 9 Palindrome Number - xdzhcs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="你好,hugo 这是我的第一篇文章，好吧，测试文章。">
+  <meta name="description" content="题目 https://leetcode.com/problems/palindrome-number/ &gt;Determine whether an integer is a palindrome. Do this without extra space. click to show spoilers. Some hints: Could negative integers be palindromes? (ie, -1) If you are thinking of converting the integer to string, note the restriction of using extra space. You could also try reversing an integer. However, if you have solved the problem &ldquo;Reverse Integer&rdquo;, you know that the reversed integer might overflow. How">
   <meta name="author" content="xdzhcs">
-  <meta itemprop="name" content="你好,hugo - xdzhcs">
-  <meta itemprop="description" content="你好,hugo 这是我的第一篇文章，好吧，测试文章。">
+  <meta itemprop="name" content="LeetCode 9 Palindrome Number - xdzhcs">
+  <meta itemprop="description" content="题目 https://leetcode.com/problems/palindrome-number/ &gt;Determine whether an integer is a palindrome. Do this without extra space. click to show spoilers. Some hints: Could negative integers be palindromes? (ie, -1) If you are thinking of converting the integer to string, note the restriction of using extra space. You could also try reversing an integer. However, if you have solved the problem &ldquo;Reverse Integer&rdquo;, you know that the reversed integer might overflow. How">
   <meta itemprop="image" content="/img/author.jpg">
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@xdzhcs" />
-  <meta name="twitter:title" content="你好,hugo - xdzhcs" />
+  <meta name="twitter:title" content="LeetCode 9 Palindrome Number - xdzhcs" />
   
   <meta name="twitter:description" content="">
   
@@ -63,7 +63,7 @@
 	<article itemprop="articleBody">
     <header class="article-info clearfix">
   <h1 itemprop="name">
-      <a href="/post/first/" title="你好,hugo" itemprop="url">你好,hugo</a>
+      <a href="/post/LeetCode-9-Palindrome-Number/" title="LeetCode 9 Palindrome Number" itemprop="url">LeetCode 9 Palindrome Number</a>
   </h1>
   <p class="article-author">By
     
@@ -71,7 +71,7 @@
     
   </p>
   <p class="article-time">
-    <time datetime="2016-08-24 21:13:10 &#43;0800 CST" itemprop="datePublished">2016年08月24日</time>
+    <time datetime="2016-09-17 20:52:05 &#43;0800 CST" itemprop="datePublished">2016年09月17日</time>
   </p>
 </header>
 
@@ -79,9 +79,43 @@
     
     
 
-<h3 id="你好-hugo">你好,hugo</h3>
+<h3 id="题目">题目</h3>
 
-<p>这是我的第一篇文章，好吧，测试文章。</p>
+<p><a href="https://leetcode.com/problems/palindrome-number/">https://leetcode.com/problems/palindrome-number/</a>
+&gt;Determine whether an integer is a palindrome. Do this without extra space.
+click to show spoilers.
+Some hints:
+Could negative integers be palindromes? (ie, -1)
+If you are thinking of converting the integer to string, note the restriction of using extra space.
+You could also try reversing an integer. However, if you have solved the problem &ldquo;Reverse Integer&rdquo;, you know that the reversed integer might overflow. How would you handle such case?
+There is a more generic way of solving this problem.
+Subscribe to see which companies asked this question</p>
+
+<h3 id="题意">题意</h3>
+
+<h3 id="思路">思路</h3>
+
+<h3 id="代码">代码</h3>
+
+<pre><code>public class Solution {
+    /**
+     * 判断回文数字
+     * @param x
+     * @return
+     */
+    public boolean isPalindrome(int x) {
+        if(x&lt;0)return false;
+        if(x==0)return true;
+        String s=x+&quot;&quot;;
+        for(int i=0;i&lt;s.length()/2;i++){
+            if(!(s.charAt(i)==s.charAt(s.length()-1-i))){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+</code></pre>
 
 	</div>
   <footer class="article-footer clearfix">
@@ -90,13 +124,7 @@
 <div class="article-tags">
   <span></span>
   
-  <a href="/tags/%E9%9A%8F%E7%AC%94">随笔</a>
-  
-  <a href="/tags/%E7%81%B5%E6%84%9F">灵感</a>
-  
-  <a href="/tags/%E7%AC%94%E8%AE%B0">笔记</a>
-  
-  <a href="/tags/android">android</a>
+  <a href="/tags/leetcode">LeetCode</a>
   
 </div>
 
@@ -107,18 +135,14 @@
 <div class="article-categories">
   <span></span>
   
-  <a class="article-category-link" href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0">读书笔记</a>
-  
-  <a class="article-category-link" href="/categories/%E6%80%9D%E8%80%83%E6%84%9F%E6%82%9F">思考感悟</a>
-  
-  <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0">技术文章</a>
+  <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF">学习之路</a>
   
 </div>
 
 
 
   <div class="article-share" id="share">
-    <div data-url="/post/first/" data-title="你好,hugo" data-tsina="" class="share clearfix">
+    <div data-url="/post/LeetCode-9-Palindrome-Number/" data-title="LeetCode 9 Palindrome Number" data-tsina="" class="share clearfix">
     </div>
   </div>
 </footer>
