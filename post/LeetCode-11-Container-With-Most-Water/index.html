@@ -2,20 +2,20 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>随笔 - xdzhcs</title>
+  <title>LeetCode 11 Container With Most Water - xdzhcs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="随笔">
+  <meta name="description" content="题目 Given n non-negative integers a1, a2, &hellip;, an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water. Note: You may not slant the container. Subscribe to see which companies asked">
   <meta name="author" content="xdzhcs">
-  <meta itemprop="name" content="随笔 - xdzhcs">
-  <meta itemprop="description" content="随笔">
+  <meta itemprop="name" content="LeetCode 11 Container With Most Water - xdzhcs">
+  <meta itemprop="description" content="题目 Given n non-negative integers a1, a2, &hellip;, an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water. Note: You may not slant the container. Subscribe to see which companies asked">
   <meta itemprop="image" content="/img/author.jpg">
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@xdzhcs" />
-  <meta name="twitter:title" content="随笔 - xdzhcs" />
+  <meta name="twitter:title" content="LeetCode 11 Container With Most Water - xdzhcs" />
   
   <meta name="twitter:description" content="">
-  <link rel="alternate" href="/feed.xml" title="xdzhcs" type="application/rss+xml"/>
+  
   <link rel="shortcut icon" href="/img/favicon.ico"/>
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png" />
@@ -59,21 +59,99 @@
 
   </header>
   <div id="container">
-    <div id="main">
-      
-      <h2 id="2016-08">2016-08</h2>
-      
-      <section class="post" itemscope itemprop="blogPost">
-    <a href="/post/first/" title="你好,hugo" itemprop="url">
-    <h1 itemprop="name">你好,hugo</h1>
-    <p itemprop="description">你好,hugo 这是我的第一篇文章，好吧，测试文章。</p>
-    <time datetime="2016-08-24 21:13:10 &#43;0800 CST" itemprop="datePublished">2016年08月24日</time>
-  </a>
-</section>
+    <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody">
+    <header class="article-info clearfix">
+  <h1 itemprop="name">
+      <a href="/post/LeetCode-11-Container-With-Most-Water/" title="LeetCode 11 Container With Most Water" itemprop="url">LeetCode 11 Container With Most Water</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.xdzhcs.xyz" title="xdzhcs">xdzhcs</a>
+    
+  </p>
+  <p class="article-time">
+    <time datetime="2016-09-17 09:48:29 &#43;0800 CST" itemprop="datePublished">2016年09月17日</time>
+  </p>
+</header>
 
-      
-      
+	<div class="article-content">
+    
+    
+
+<h3 id="题目">题目</h3>
+
+<p>Given n non-negative integers a1, a2, &hellip;, an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+Note: You may not slant the container.
+Subscribe to see which companies asked this question
+<a href="https://leetcode.com/problems/container-with-most-water/">https://leetcode.com/problems/container-with-most-water/</a></p>
+
+<h3 id="题意">题意</h3>
+
+<p>给出一个非负的数组a1,a2&hellip;an,这些数可以在坐标系确定若干条垂直于x轴的直线{(1,0)(1,a1)}&hellip;{(n,0)(n,an)}。每两条垂直的直线可以组成一个容器，问在这些组合中，能装水的最大容积</p>
+
+<h3 id="思路">思路</h3>
+
+<p>定义两个下标：left和right,分别从数组的左边和右边开始往中间靠拢，依次算出面积，如果超过最大值，则更新最大值。</p>
+
+<h3 id="代码">代码</h3>
+
+<pre><code>package xyz.xdzhcs;
+
+public class LeetCode11 {
+    public int maxArea(int[] height) {
+        int left=0;
+        int right=height.length-1;
+        int max=-1;
+        for(;left&lt;right;){
+            if(height[left]&lt;height[right]){
+                int area=(right-left)*height[left];
+                if(area&gt;max){
+                    max=area;
+                }
+                left++;
+            }else {
+                int area=(right-left)*height[right];
+                if(area&gt;max){
+                    max=area;
+                }
+                right--;
+            }
+        }
+        return max;
+    }
+}
+
+</code></pre>
+
+	</div>
+  <footer class="article-footer clearfix">
+  
+
+<div class="article-tags">
+  <span></span>
+  
+  <a href="/tags/leetcode">LeetCode</a>
+  
+</div>
+
+
+
+
+
+  <div class="article-share" id="share">
+    <div data-url="/post/LeetCode-11-Container-With-Most-Water/" data-title="LeetCode 11 Container With Most Water" data-tsina="" class="share clearfix">
     </div>
+  </div>
+</footer>
+
+	</article>
+  
+
+
+
+</div>
+
     <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -158,10 +236,6 @@
 
 
   
-<div class="rsspart">
-  <a rel="nofollow" href="/feed.xml" type="application/rss+xml" target="_blank">RSS 订阅</a>
-</div>
-
 
 </aside>
 </div>
@@ -245,6 +319,38 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
   var $this = $('.share'),
       url = $this.attr('data-url'),
       encodedUrl = encodeURIComponent(url),
@@ -271,6 +377,27 @@ $(document).ready(function(){
 });
 </script>
 
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
 
 
 

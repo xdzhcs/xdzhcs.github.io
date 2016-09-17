@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on xdzhcs</title>
-    <link>/post/</link>
-    <description>Recent content in Posts on xdzhcs</description>
+    <title>Leetcode on xdzhcs</title>
+    <link>/tags/leetcode/</link>
+    <description>Recent content in Leetcode on xdzhcs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 17 Sep 2016 10:41:02 +0800</lastBuildDate>
-    <atom:link href="/post/feed/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/leetcode/feed/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>LeetCode 14 Longest Common Prefix</title>
@@ -115,20 +115,6 @@ public class LeetCode11 {
 }
 
 &lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>你好,hugo</title>
-      <link>/post/first/</link>
-      <pubDate>Wed, 24 Aug 2016 21:13:10 +0800</pubDate>
-      
-      <guid>/post/first/</guid>
-      <description>
-
-&lt;h3 id=&#34;你好-hugo&#34;&gt;你好,hugo&lt;/h3&gt;
-
-&lt;p&gt;这是我的第一篇文章，好吧，测试文章。&lt;/p&gt;
 </description>
     </item>
     

@@ -2,20 +2,20 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>随笔 - xdzhcs</title>
+  <title>LeetCode 14 Longest Common Prefix - xdzhcs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
   
-  <meta name="description" content="随笔">
+  <meta name="description" content="题目 https://leetcode.com/problems/longest-common-prefix/ Write a function to find the longest common prefix string amongst an array of strings. 题意 给出一个字符串数组，求最长共同前缀。 思路 直接遍历。先遍历每个字符串的第0个字符，看是否相同，然后第1">
   <meta name="author" content="xdzhcs">
-  <meta itemprop="name" content="随笔 - xdzhcs">
-  <meta itemprop="description" content="随笔">
+  <meta itemprop="name" content="LeetCode 14 Longest Common Prefix - xdzhcs">
+  <meta itemprop="description" content="题目 https://leetcode.com/problems/longest-common-prefix/ Write a function to find the longest common prefix string amongst an array of strings. 题意 给出一个字符串数组，求最长共同前缀。 思路 直接遍历。先遍历每个字符串的第0个字符，看是否相同，然后第1">
   <meta itemprop="image" content="/img/author.jpg">
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@xdzhcs" />
-  <meta name="twitter:title" content="随笔 - xdzhcs" />
+  <meta name="twitter:title" content="LeetCode 14 Longest Common Prefix - xdzhcs" />
   
   <meta name="twitter:description" content="">
-  <link rel="alternate" href="/feed.xml" title="xdzhcs" type="application/rss+xml"/>
+  
   <link rel="shortcut icon" href="/img/favicon.ico"/>
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png" />
@@ -59,21 +59,98 @@
 
   </header>
   <div id="container">
-    <div id="main">
-      
-      <h2 id="2016-08">2016-08</h2>
-      
-      <section class="post" itemscope itemprop="blogPost">
-    <a href="/post/first/" title="你好,hugo" itemprop="url">
-    <h1 itemprop="name">你好,hugo</h1>
-    <p itemprop="description">你好,hugo 这是我的第一篇文章，好吧，测试文章。</p>
-    <time datetime="2016-08-24 21:13:10 &#43;0800 CST" itemprop="datePublished">2016年08月24日</time>
-  </a>
-</section>
+    <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody">
+    <header class="article-info clearfix">
+  <h1 itemprop="name">
+      <a href="/post/LeetCode-14-Longest-Common-Prefix/" title="LeetCode 14 Longest Common Prefix" itemprop="url">LeetCode 14 Longest Common Prefix</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://blog.xdzhcs.xyz" title="xdzhcs">xdzhcs</a>
+    
+  </p>
+  <p class="article-time">
+    <time datetime="2016-09-17 10:41:02 &#43;0800 CST" itemprop="datePublished">2016年09月17日</time>
+  </p>
+</header>
 
-      
-      
+	<div class="article-content">
+    
+    
+
+<h3 id="题目">题目</h3>
+
+<p><a href="https://leetcode.com/problems/longest-common-prefix/">https://leetcode.com/problems/longest-common-prefix/</a>
+Write a function to find the longest common prefix string amongst an array of strings.</p>
+
+<h3 id="题意">题意</h3>
+
+<p>给出一个字符串数组，求最长共同前缀。</p>
+
+<h3 id="思路">思路</h3>
+
+<p>直接遍历。先遍历每个字符串的第0个字符，看是否相同，然后第1个，类推下去，相同就记录下来，不相同则表示循环要结束了，最长前缀只有这么长。</p>
+
+<h3 id="代码">代码</h3>
+
+<pre><code>public class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if(strs==null||strs.length==0)return &quot;&quot;;
+        int minLength=Integer.MAX_VALUE;
+        for(int i=0;i&lt;strs.length;i++){
+            if(strs[i].length()&lt;minLength){
+                minLength=strs[i].length();
+            }
+        }
+        StringBuilder sb=new StringBuilder();
+        boolean finished=false;
+        for(int i=0;i&lt;minLength;i++){
+            for(int j=0;j&lt;strs.length-1;j++){
+                if(strs[j].charAt(i)!=strs[j+1].charAt(i)){
+                    finished=true;
+                    break;
+                }
+            }
+            if(!finished){
+                sb.append(strs[0].charAt(i));
+            }else{
+                break;
+            }
+        }
+        return sb.toString();
+    }
+}
+</code></pre>
+
+	</div>
+  <footer class="article-footer clearfix">
+  
+
+<div class="article-tags">
+  <span></span>
+  
+  <a href="/tags/leetcode">LeetCode</a>
+  
+</div>
+
+
+
+
+
+  <div class="article-share" id="share">
+    <div data-url="/post/LeetCode-14-Longest-Common-Prefix/" data-title="LeetCode 14 Longest Common Prefix" data-tsina="" class="share clearfix">
     </div>
+  </div>
+</footer>
+
+	</article>
+  
+
+
+
+</div>
+
     <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -158,10 +235,6 @@
 
 
   
-<div class="rsspart">
-  <a rel="nofollow" href="/feed.xml" type="application/rss+xml" target="_blank">RSS 订阅</a>
-</div>
-
 
 </aside>
 </div>
@@ -245,6 +318,38 @@ $(document).ready(function(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
   var $this = $('.share'),
       url = $this.attr('data-url'),
       encodedUrl = encodeURIComponent(url),
@@ -271,6 +376,27 @@ $(document).ready(function(){
 });
 </script>
 
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
 
 
 
