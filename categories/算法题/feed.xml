@@ -6,8 +6,64 @@
     <description>Recent content in 算法题 on xdzhcs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 17 Sep 2016 20:53:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 18 Sep 2016 11:00:44 +0800</lastBuildDate>
     <atom:link href="/categories/%E7%AE%97%E6%B3%95%E9%A2%98/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>LeetCode 20 Valid Parentheses</title>
+      <link>/post/LeetCode-20-Valid-Parentheses/</link>
+      <pubDate>Sun, 18 Sep 2016 11:00:44 +0800</pubDate>
+      
+      <guid>/post/LeetCode-20-Valid-Parentheses/</guid>
+      <description>
+
+&lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://leetcode.com/problems/valid-parentheses/&#34;&gt;https://leetcode.com/problems/valid-parentheses/&lt;/a&gt;
+&amp;gt;Given a string containing just the characters &amp;lsquo;(&amp;rsquo;, &amp;lsquo;)&amp;rsquo;, &amp;lsquo;{&amp;rsquo;, &amp;lsquo;}&amp;rsquo;, &amp;lsquo;[&amp;rsquo; and &amp;lsquo;]&amp;rsquo;, determine if the input string is valid.
+The brackets must close in the correct order, &amp;ldquo;()&amp;rdquo; and &amp;ldquo;()[]{}&amp;rdquo; are all valid but &amp;ldquo;(]&amp;rdquo; and &amp;ldquo;([)]&amp;rdquo; are not.&lt;/p&gt;
+
+&lt;h3 id=&#34;题意&#34;&gt;题意&lt;/h3&gt;
+
+&lt;p&gt;括号匹配问题。给出一个字符串，里面只有&amp;rsquo;(&amp;lsquo;, &amp;lsquo;)&amp;rsquo;, &amp;lsquo;{&amp;rsquo;, &amp;lsquo;}&amp;rsquo;, &amp;lsquo;[&amp;lsquo;6种字符，求括号是否合法匹配。&lt;/p&gt;
+
+&lt;h3 id=&#34;思路&#34;&gt;思路&lt;/h3&gt;
+
+&lt;p&gt;用栈结构。&lt;/p&gt;
+
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;public class Solution {
+    public boolean isValid(String s) {
+        Stack&amp;lt;Character&amp;gt; stack=new Stack&amp;lt;&amp;gt;();
+        for(int i=0;i&amp;lt;s.length();i++){
+            if(!stack.isEmpty()){
+                switch ((char)stack.peek()) {
+                case &#39;(&#39;:
+                    if(s.charAt(i)==&#39;)&#39;)stack.pop();
+                    else stack.push(s.charAt(i));
+                    break;
+                case &#39;[&#39;:
+                    if(s.charAt(i)==&#39;]&#39;)stack.pop();
+                    else stack.push(s.charAt(i));
+                    break;
+                case &#39;{&#39;:
+                    if(s.charAt(i)==&#39;}&#39;)stack.pop();
+                    else stack.push(s.charAt(i));
+                    break;
+                default:
+                    break;
+                }
+            }else {
+                stack.push(s.charAt(i));
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>LeetCode 3 Longest Substring Without Repeating Characters</title>
