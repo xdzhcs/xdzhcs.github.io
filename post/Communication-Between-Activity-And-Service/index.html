@@ -83,11 +83,11 @@
 
 <p>###通过Binder通信
 我们知道启动一个Service可以使用startService方法或者bindService方法。
-来看看bindService方法
-<code>boolean bindService (Intent service, ServiceConnection conn, int flags)</code>
-第二个参数是一个ServiceConnection对象，里面有两个必须重写的方法
-<code>public void onServiceDisconnected(ComponentName name)</code>
-<code>public void onServiceConnected(ComponentName name, IBinder service)</code>
+来看看bindService方法<br />
+<code>boolean bindService (Intent service, ServiceConnection conn, int flags)</code><br />
+第二个参数是一个ServiceConnection对象，里面有两个必须重写的方法<br />
+<code>public void onServiceDisconnected(ComponentName name)</code><br />
+<code>public void onServiceConnected(ComponentName name, IBinder service)</code><br />
 在bindService绑定Service之后会自动调用onServiceConnected方法,参数里有个IBinder对象，我们只需要在Service里面定义好这个IBinder对象(在Service的onBind方法中返回)，我们在Activity中就可以通过它操作Service了。
 上代码</p>
 
@@ -202,8 +202,8 @@ public class MainActivity extends AppCompatActivity {
 </code></pre>
 
 <p>点击开始下载，然后每点一次获取进度就可以调用binder中的getProgress方法返回当前进度了，效果如下。
-！[](blog.xdzhcs.xyz/img/communication-between-activity-and-service/1.png)
-！[](blog.xdzhcs.xyz/img/communication-between-activity-and-service/2.png)
+！[](<a href="http://blog.xdzhcs.xyz/img/Communication-Between-Activity-And-Service/img1.png">http://blog.xdzhcs.xyz/img/Communication-Between-Activity-And-Service/img1.png</a>)
+！[](<a href="http://blog.xdzhcs.xyz/img/Communication-Between-Activity-And-Service/img2.png">http://blog.xdzhcs.xyz/img/Communication-Between-Activity-And-Service/img2.png</a>)
 所以到目前为止，已经实现了从Activity操纵Service了，但是这种获取进度的方法也太不优雅了吧，有没有方法可以让Service主动通知Activity下载进度呢？当然有，那就是：回调！
 定义一个接口</p>
 
