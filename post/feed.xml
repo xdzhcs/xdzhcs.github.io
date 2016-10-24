@@ -11,16 +11,19 @@
     
     <item>
       <title>activity与service的通信</title>
-      <link>/post/Communication-Between-Activity-And-Service/</link>
+      <link>/post/communication-between-activity-and-service/</link>
       <pubDate>Sun, 23 Oct 2016 11:50:52 +0800</pubDate>
       
-      <guid>/post/Communication-Between-Activity-And-Service/</guid>
-      <description>&lt;p&gt;Activity和Service之间的通信主要有两种形式
+      <guid>/post/communication-between-activity-and-service/</guid>
+      <description>
+
+&lt;p&gt;Activity和Service之间的通信主要有两种形式
 1. Binder作为桥梁进行通信
 2. 通过广播通信&lt;/p&gt;
 
-&lt;p&gt;###通过Binder通信
-我们知道启动一个Service可以使用startService方法或者bindService方法。
+&lt;h3 id=&#34;通过binder通信&#34;&gt;通过Binder通信&lt;/h3&gt;
+
+&lt;p&gt;我们知道启动一个Service可以使用startService方法或者bindService方法。
 来看看bindService方法&lt;br /&gt;
 &lt;code&gt;boolean bindService (Intent service, ServiceConnection conn, int flags)&lt;/code&gt;&lt;br /&gt;
 第二个参数是一个ServiceConnection对象，里面有两个必须重写的方法&lt;br /&gt;
@@ -139,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;点击开始下载，然后每点一次获取进度就可以调用binder中的getProgress方法返回当前进度了，效果如下。
-！[](&lt;a href=&#34;http://blog.xdzhcs.xyz/img/Communication-Between-Activity-And-Service/img1.png&#34;&gt;http://blog.xdzhcs.xyz/img/Communication-Between-Activity-And-Service/img1.png&lt;/a&gt;)
-！[](&lt;a href=&#34;http://blog.xdzhcs.xyz/img/Communication-Between-Activity-And-Service/img2.png&#34;&gt;http://blog.xdzhcs.xyz/img/Communication-Between-Activity-And-Service/img2.png&lt;/a&gt;)
+&lt;p&gt;点击开始下载，然后每点一次获取进度就可以调用binder中的getProgress方法返回当前进度了，效果如下。&lt;br /&gt;
+&lt;img src=&#34;/img/communication-between-activity-and-service/img1.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;/img/communication-between-activity-and-service/img2.png&#34; alt=&#34;&#34; /&gt;
 所以到目前为止，已经实现了从Activity操纵Service了，但是这种获取进度的方法也太不优雅了吧，有没有方法可以让Service主动通知Activity下载进度呢？当然有，那就是：回调！
 定义一个接口&lt;/p&gt;
 
@@ -307,17 +310,154 @@ public class MainActivity extends AppCompatActivity {
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;这样就能自动更新进度了。
-未完待续&amp;hellip;&lt;/p&gt;
+&lt;p&gt;这样就能自动更新进度了。&lt;/p&gt;
+
+&lt;h3 id=&#34;使用brocastreceiver进行通信&#34;&gt;使用BrocastReceiver进行通信&lt;/h3&gt;
+
+&lt;p&gt;基本思路为，在Activity中注册BrocastReceiver，然后在Service中发送广播（带上progress的数值）,在Activity中接收到广播并处理,代码如下.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package xyz.xdzhcs.servicedemo;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
+
+/**
+ * Created by xdzhcs on 2016/10/23.
+ */
+public class DownloadService extends Service {
+
+    private int progress=0;
+
+    /**
+     * 开始下载(更新progress)
+     */
+    public void startDownload(){
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               while (progress&amp;lt;100){
+                   //做了一些事情......进度更新了
+                   progress++;
+                   //发送广播
+                   Intent intent = new Intent(&amp;quot;xyz.xdzhcs.servicedomo.UPDATE_PROGRESS&amp;quot;);
+                   intent.putExtra(&amp;quot;progress&amp;quot;,progress);
+                   sendBroadcast(intent);
+                   try {
+                       Thread.sleep(1000);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }
+           }
+       }).start();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        startDownload();
+        return super.onStartCommand(intent, flags, startId);
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;package xyz.xdzhcs.servicedemo;
+
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private Intent intent;
+    private ProgressReceiver receiver;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        intent = new Intent(MainActivity.this,DownloadService.class);
+        receiver=new ProgressReceiver();
+        //注册广播接收器
+        IntentFilter filter=new IntentFilter();
+        filter.addAction(&amp;quot;xyz.xdzhcs.servicedomo.UPDATE_PROGRESS&amp;quot;);
+        registerReceiver(receiver,filter);
+        //开始下载
+        findViewById(R.id.btn_start_download).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this,&amp;quot;已经启动服务开始下载&amp;quot;,Toast.LENGTH_SHORT).show();
+                startService(intent);
+            }
+        });
+
+    }
+    /**
+     *  广播接收器
+     */
+    public class ProgressReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int progress = intent.getIntExtra(&amp;quot;progress&amp;quot;,0);
+            Toast.makeText(MainActivity.this,&amp;quot;当前进度为:&amp;quot;+progress,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+        stopService(intent);
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果和前面的差不多,在Activity中调用startService启动了Service以后，Service会马上在onStartCommand方法中调用startDownload。在progress数值更新以后，service发送广播，activity接收到广播并进行处理。
+这就实现了单向的从Service向Activity中发送信息了。那么如何从Activity想Service中发消息呢?这还不简单，在Service里注册广播接收器，从Activity发送广播，Service根据广播中附带的信息进行相应操作就好了。&lt;/p&gt;
+
+&lt;h3 id=&#34;小结&#34;&gt;小结&lt;/h3&gt;
+
+&lt;h5 id=&#34;使用binder通信&#34;&gt;使用binder通信&lt;/h5&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Activity&amp;ndash;&amp;gt;Service 通过 Activity通过Binder调用Service&lt;/li&gt;
+&lt;li&gt;Service&amp;ndash;&amp;gt;Activity 使用回调&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&#34;使用广播通信&#34;&gt;使用广播通信&lt;/h5&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Activity &amp;lt;&amp;ndash;&amp;gt; Service 注册广播接收器，互发广播&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     
     <item>
       <title>LeetCode 20 Valid Parentheses</title>
-      <link>/post/LeetCode-20-Valid-Parentheses/</link>
+      <link>/post/leetcode-20-valid-parentheses/</link>
       <pubDate>Sun, 18 Sep 2016 11:00:44 +0800</pubDate>
       
-      <guid>/post/LeetCode-20-Valid-Parentheses/</guid>
+      <guid>/post/leetcode-20-valid-parentheses/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -370,10 +510,10 @@ The brackets must close in the correct order, &amp;ldquo;()&amp;rdquo; and &amp;
     
     <item>
       <title>LeetCode 3 Longest Substring Without Repeating Characters</title>
-      <link>/post/LeetCode-3-Longest-Substring-Without-Repeating-Characters/</link>
+      <link>/post/leetcode-3-longest-substring-without-repeating-characters/</link>
       <pubDate>Sat, 17 Sep 2016 20:53:00 +0800</pubDate>
       
-      <guid>/post/LeetCode-3-Longest-Substring-Without-Repeating-Characters/</guid>
+      <guid>/post/leetcode-3-longest-substring-without-repeating-characters/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -433,10 +573,10 @@ Given &amp;ldquo;pwwkew&amp;rdquo;, the answer is &amp;ldquo;wke&amp;rdquo;, wit
     
     <item>
       <title>LeetCode 1 Two Sum</title>
-      <link>/post/LeetCode-1-Two-Sum/</link>
+      <link>/post/leetcode-1-two-sum/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-1-Two-Sum/</guid>
+      <guid>/post/leetcode-1-two-sum/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -475,10 +615,10 @@ The return format had been changed to zero-based indices. Please read the above 
     
     <item>
       <title>LeetCode 2 Add Two Numbers</title>
-      <link>/post/LeetCode-2-Add-Two-Numbers/</link>
+      <link>/post/leetcode-2-add-Two-numbers/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-2-Add-Two-Numbers/</guid>
+      <guid>/post/leetcode-2-add-Two-numbers/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -548,10 +688,10 @@ public class Solution {
     
     <item>
       <title>LeetCode 4 Median of Two Sorted Arrays</title>
-      <link>/post/LeetCode-4-Median-of-Two-Sorted-Arrays/</link>
+      <link>/post/leetcode-4-median-of-two-sorted-arrays/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-4-Median-of-Two-Sorted-Arrays/</guid>
+      <guid>/post/leetcode-4-median-of-two-sorted-arrays/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -621,10 +761,10 @@ The median is (2 + 3)/2 = 2.5&lt;/p&gt;
     
     <item>
       <title>LeetCode 5 Longest Palindromic Substring </title>
-      <link>/post/LeetCode-5-Longest-Palindromic-Substring/</link>
+      <link>/post/leetcode-5-longest-palindromic-substring/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-5-Longest-Palindromic-Substring/</guid>
+      <guid>/post/leetcode-5-longest-palindromic-substring/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -687,10 +827,10 @@ Subscribe to see which companies asked this question&lt;/p&gt;
     
     <item>
       <title>LeetCode 6 ZigZag Conversion</title>
-      <link>/post/LeetCode-6-ZigZag-Conversion/</link>
+      <link>/post/leetcode-6-zigzag-conversion/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-6-ZigZag-Conversion/</guid>
+      <guid>/post/leetcode-6-zigzag-conversion/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -741,10 +881,10 @@ convert(&amp;ldquo;PAYPALISHIRING&amp;rdquo;, 3) should return &amp;ldquo;PAHNAP
     
     <item>
       <title>LeetCode 7 Reverse Integer</title>
-      <link>/post/LeetCode-7-Reverse-Integer/</link>
+      <link>/post/leetcode-7-reverse-integer/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-7-Reverse-Integer/</guid>
+      <guid>/post/leetcode-7-reverse-integer/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -791,10 +931,10 @@ Example2: x = -123, return -321&lt;/p&gt;
     
     <item>
       <title>LeetCode 8 String to Integer (atoi)</title>
-      <link>/post/LeetCode-8-String-to-Integer-%28atoi%29/</link>
+      <link>/post/leetcode-8-string-to-integer-%28atoi%29/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-8-String-to-Integer-%28atoi%29/</guid>
+      <guid>/post/leetcode-8-string-to-integer-%28atoi%29/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -872,10 +1012,10 @@ Notes: It is intended for this problem to be specified vaguely (ie, no given inp
     
     <item>
       <title>LeetCode 9 Palindrome Number</title>
-      <link>/post/LeetCode-9-Palindrome-Number/</link>
+      <link>/post/leetcode-9-palindrome-number/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-9-Palindrome-Number/</guid>
+      <guid>/post/leetcode-9-palindrome-number/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -920,10 +1060,10 @@ Subscribe to see which companies asked this question&lt;/p&gt;
     
     <item>
       <title>LeetCode 14 Longest Common Prefix</title>
-      <link>/post/LeetCode-14-Longest-Common-Prefix/</link>
+      <link>/post/leetcode-14-longest-common-prefix/</link>
       <pubDate>Sat, 17 Sep 2016 10:41:02 +0800</pubDate>
       
-      <guid>/post/LeetCode-14-Longest-Common-Prefix/</guid>
+      <guid>/post/leetcode-14-longest-common-prefix/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -974,10 +1114,10 @@ Subscribe to see which companies asked this question&lt;/p&gt;
     
     <item>
       <title>LeetCode 11 Container With Most Water</title>
-      <link>/post/LeetCode-11-Container-With-Most-Water/</link>
+      <link>/post/leetcode-11-container-with-most-water/</link>
       <pubDate>Sat, 17 Sep 2016 09:48:29 +0800</pubDate>
       
-      <guid>/post/LeetCode-11-Container-With-Most-Water/</guid>
+      <guid>/post/leetcode-11-container-with-most-water/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;

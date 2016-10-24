@@ -11,10 +11,10 @@
     
     <item>
       <title>LeetCode 20 Valid Parentheses</title>
-      <link>/post/LeetCode-20-Valid-Parentheses/</link>
+      <link>/post/leetcode-20-valid-parentheses/</link>
       <pubDate>Sun, 18 Sep 2016 11:00:44 +0800</pubDate>
       
-      <guid>/post/LeetCode-20-Valid-Parentheses/</guid>
+      <guid>/post/leetcode-20-valid-parentheses/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -67,10 +67,10 @@ The brackets must close in the correct order, &amp;ldquo;()&amp;rdquo; and &amp;
     
     <item>
       <title>LeetCode 3 Longest Substring Without Repeating Characters</title>
-      <link>/post/LeetCode-3-Longest-Substring-Without-Repeating-Characters/</link>
+      <link>/post/leetcode-3-longest-substring-without-repeating-characters/</link>
       <pubDate>Sat, 17 Sep 2016 20:53:00 +0800</pubDate>
       
-      <guid>/post/LeetCode-3-Longest-Substring-Without-Repeating-Characters/</guid>
+      <guid>/post/leetcode-3-longest-substring-without-repeating-characters/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -130,10 +130,10 @@ Given &amp;ldquo;pwwkew&amp;rdquo;, the answer is &amp;ldquo;wke&amp;rdquo;, wit
     
     <item>
       <title>LeetCode 1 Two Sum</title>
-      <link>/post/LeetCode-1-Two-Sum/</link>
+      <link>/post/leetcode-1-two-sum/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-1-Two-Sum/</guid>
+      <guid>/post/leetcode-1-two-sum/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -172,10 +172,10 @@ The return format had been changed to zero-based indices. Please read the above 
     
     <item>
       <title>LeetCode 2 Add Two Numbers</title>
-      <link>/post/LeetCode-2-Add-Two-Numbers/</link>
+      <link>/post/leetcode-2-add-Two-numbers/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-2-Add-Two-Numbers/</guid>
+      <guid>/post/leetcode-2-add-Two-numbers/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -245,10 +245,10 @@ public class Solution {
     
     <item>
       <title>LeetCode 4 Median of Two Sorted Arrays</title>
-      <link>/post/LeetCode-4-Median-of-Two-Sorted-Arrays/</link>
+      <link>/post/leetcode-4-median-of-two-sorted-arrays/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-4-Median-of-Two-Sorted-Arrays/</guid>
+      <guid>/post/leetcode-4-median-of-two-sorted-arrays/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -318,10 +318,10 @@ The median is (2 + 3)/2 = 2.5&lt;/p&gt;
     
     <item>
       <title>LeetCode 5 Longest Palindromic Substring </title>
-      <link>/post/LeetCode-5-Longest-Palindromic-Substring/</link>
+      <link>/post/leetcode-5-longest-palindromic-substring/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-5-Longest-Palindromic-Substring/</guid>
+      <guid>/post/leetcode-5-longest-palindromic-substring/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -384,10 +384,10 @@ Subscribe to see which companies asked this question&lt;/p&gt;
     
     <item>
       <title>LeetCode 6 ZigZag Conversion</title>
-      <link>/post/LeetCode-6-ZigZag-Conversion/</link>
+      <link>/post/leetcode-6-zigzag-conversion/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-6-ZigZag-Conversion/</guid>
+      <guid>/post/leetcode-6-zigzag-conversion/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -438,10 +438,10 @@ convert(&amp;ldquo;PAYPALISHIRING&amp;rdquo;, 3) should return &amp;ldquo;PAHNAP
     
     <item>
       <title>LeetCode 7 Reverse Integer</title>
-      <link>/post/LeetCode-7-Reverse-Integer/</link>
+      <link>/post/leetcode-7-reverse-integer/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-7-Reverse-Integer/</guid>
+      <guid>/post/leetcode-7-reverse-integer/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -488,10 +488,10 @@ Example2: x = -123, return -321&lt;/p&gt;
     
     <item>
       <title>LeetCode 8 String to Integer (atoi)</title>
-      <link>/post/LeetCode-8-String-to-Integer-%28atoi%29/</link>
+      <link>/post/leetcode-8-string-to-integer-%28atoi%29/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-8-String-to-Integer-%28atoi%29/</guid>
+      <guid>/post/leetcode-8-string-to-integer-%28atoi%29/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -569,10 +569,10 @@ Notes: It is intended for this problem to be specified vaguely (ie, no given inp
     
     <item>
       <title>LeetCode 9 Palindrome Number</title>
-      <link>/post/LeetCode-9-Palindrome-Number/</link>
+      <link>/post/leetcode-9-palindrome-number/</link>
       <pubDate>Sat, 17 Sep 2016 20:52:05 +0800</pubDate>
       
-      <guid>/post/LeetCode-9-Palindrome-Number/</guid>
+      <guid>/post/leetcode-9-palindrome-number/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -617,10 +617,10 @@ Subscribe to see which companies asked this question&lt;/p&gt;
     
     <item>
       <title>LeetCode 14 Longest Common Prefix</title>
-      <link>/post/LeetCode-14-Longest-Common-Prefix/</link>
+      <link>/post/leetcode-14-longest-common-prefix/</link>
       <pubDate>Sat, 17 Sep 2016 10:41:02 +0800</pubDate>
       
-      <guid>/post/LeetCode-14-Longest-Common-Prefix/</guid>
+      <guid>/post/leetcode-14-longest-common-prefix/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
@@ -671,10 +671,10 @@ Subscribe to see which companies asked this question&lt;/p&gt;
     
     <item>
       <title>LeetCode 11 Container With Most Water</title>
-      <link>/post/LeetCode-11-Container-With-Most-Water/</link>
+      <link>/post/leetcode-11-container-with-most-water/</link>
       <pubDate>Sat, 17 Sep 2016 09:48:29 +0800</pubDate>
       
-      <guid>/post/LeetCode-11-Container-With-Most-Water/</guid>
+      <guid>/post/leetcode-11-container-with-most-water/</guid>
       <description>
 
 &lt;h3 id=&#34;题目&#34;&gt;题目&lt;/h3&gt;
