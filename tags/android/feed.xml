@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Android on xdzhcs</title>
+    <link>/tags/android/</link>
+    <description>Recent content in Android on xdzhcs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 23 Oct 2016 11:50:52 +0800</lastBuildDate>
+    <atom:link href="/tags/android/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>activity与service的通信</title>
+      <link>/post/communication-between-activity-and-service/</link>
+      <pubDate>Sun, 23 Oct 2016 11:50:52 +0800</pubDate>
+      
+      <guid>/post/communication-between-activity-and-service/</guid>
+      <description>
+
+&lt;p&gt;Activity和Service之间的通信主要有两种形式
+1. Binder作为桥梁进行通信
+2. 通过广播通信&lt;/p&gt;
+
+&lt;h3 id=&#34;通过binder通信&#34;&gt;通过Binder通信&lt;/h3&gt;
+
+&lt;p&gt;我们知道启动一个Service可以使用startService方法或者bindService方法。
+来看看bindService方法&lt;br /&gt;
+&lt;code&gt;boolean bindService (Intent service, ServiceConnection conn, int flags)&lt;/code&gt;&lt;br /&gt;
+第二个参数是一个ServiceConnection对象，里面有两个必须重写的方法&lt;br /&gt;
+&lt;code&gt;public void onServiceDisconnected(ComponentName name)&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;public void onServiceConnected(ComponentName name, IBinder service)&lt;/code&gt;&lt;br /&gt;
+在bindService绑定Service之后会自动调用onServiceConnected方法,参数里有个IBinder对象，我们只需要在Service里面定义好这个IBinder对象(在Service的onBind方法中返回)，我们在Activity中就可以通过它操作Service了。
+上代码&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package xyz.xdzhcs.servicedemo;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
+
+/**
+ * Created by xdzhcs on 2016/10/23.
+ */
+public class DownloadService extends Service {
+
+    private int progress=0;
+
+    /**
+     * 开始下载(更新progress)
+     */
+    public void startDownload(){
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               while (progress&amp;lt;100){
+                   //做了一些事情......进度更新了
+                   progress++;
+                   try {
+                       Thread.sleep(1000);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }
+           }
+       }).start();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return new MyBinder();
+    }
+    class MyBinder extends Binder{
+        public void startDownload(){
+            DownloadService.this.startDownload();
+        }
+        public int getProgress(){
+            return progress;
+        }
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;package xyz.xdzhcs.servicedemo;
+
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private DownloadService.MyBinder binder;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //绑定Service
+        Intent intent=new Intent(this,DownloadService.class);
+        bindService(intent,conn,BIND_AUTO_CREATE);
+
+        //开始下载
+        findViewById(R.id.btn_start_download).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binder.startDownload();
+                Toast.makeText(MainActivity.this,&amp;quot;已经开始下载&amp;quot;,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //获取当前下载进度
+        findViewById(R.id.btn_get_progress).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int progress=binder.getProgress();
+                Toast.makeText(MainActivity.this,&amp;quot;当前下载进度：&amp;quot;+progress,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    ServiceConnection conn=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            binder= (DownloadService.MyBinder) iBinder;
+            Toast.makeText(MainActivity.this,&amp;quot;绑定成功&amp;quot;,Toast.LENGTH_SHORT);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;点击开始下载，然后每点一次获取进度就可以调用binder中的getProgress方法返回当前进度了，效果如下。&lt;br /&gt;
+&lt;img src=&#34;/img/communication-between-activity-and-service/img1.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;/img/communication-between-activity-and-service/img2.png&#34; alt=&#34;&#34; /&gt;
+所以到目前为止，已经实现了从Activity操纵Service了，但是这种获取进度的方法也太不优雅了吧，有没有方法可以让Service主动通知Activity下载进度呢？当然有，那就是：回调！
+定义一个接口&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public interface OnProgressListener {
+    void onProgressChanged(int progress);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Service里放一个接口的实例&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;private OnProgressListener listener;
+
+    public void setListener(OnProgressListener listener) {
+        this.listener = listener;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在Activity中实现这个接口&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; binder.setListener(new OnProgressListener() {
+                @Override
+                public void onProgressChanged(final int progress) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this,&amp;quot;当前下载进度：&amp;quot;+progress,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            });
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;每次Service有更新时，就可以通过listener来告诉Activity了
+&lt;code&gt;listener.onProgressChanged(progress);&lt;/code&gt;
+最后所有的代码看起来是这样的&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package xyz.xdzhcs.servicedemo;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
+
+/**
+ * Created by xdzhcs on 2016/10/23.
+ */
+public class DownloadService extends Service {
+
+    private int progress=0;
+    private OnProgressListener listener;
+
+    /**
+     * 开始下载(更新progress)
+     */
+    public void startDownload(){
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               while (progress&amp;lt;100){
+                   //做了一些事情......进度更新了
+                   progress++;
+                   //通知activity更新进度
+                   listener.onProgressChanged(progress);
+                   try {
+                       Thread.sleep(1000);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }
+           }
+       }).start();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return new MyBinder();
+    }
+    class MyBinder extends Binder{
+        public void startDownload(){
+            DownloadService.this.startDownload();
+        }
+        public int getProgress(){
+            return progress;
+        }
+        public void setListener(OnProgressListener listener) {
+            DownloadService.this.listener=listener;
+        }
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;package xyz.xdzhcs.servicedemo;
+
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private DownloadService.MyBinder binder;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //绑定Service
+        Intent intent=new Intent(this,DownloadService.class);
+        bindService(intent,conn,BIND_AUTO_CREATE);
+
+        //开始下载
+        findViewById(R.id.btn_start_download).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binder.startDownload();
+                Toast.makeText(MainActivity.this,&amp;quot;已经开始下载&amp;quot;,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //获取当前下载进度
+        findViewById(R.id.btn_get_progress).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int progress=binder.getProgress();
+                Toast.makeText(MainActivity.this,&amp;quot;当前下载进度：&amp;quot;+progress,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    ServiceConnection conn=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            binder= (DownloadService.MyBinder) iBinder;
+            Toast.makeText(MainActivity.this,&amp;quot;绑定成功&amp;quot;,Toast.LENGTH_SHORT);
+            binder.setListener(new OnProgressListener() {
+                @Override
+                public void onProgressChanged(final int progress) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this,&amp;quot;当前下载进度：&amp;quot;+progress,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            });
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样就能自动更新进度了。&lt;/p&gt;
+
+&lt;h3 id=&#34;使用brocastreceiver进行通信&#34;&gt;使用BrocastReceiver进行通信&lt;/h3&gt;
+
+&lt;p&gt;基本思路为，在Activity中注册BrocastReceiver，然后在Service中发送广播（带上progress的数值）,在Activity中接收到广播并处理,代码如下.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package xyz.xdzhcs.servicedemo;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
+
+/**
+ * Created by xdzhcs on 2016/10/23.
+ */
+public class DownloadService extends Service {
+
+    private int progress=0;
+
+    /**
+     * 开始下载(更新progress)
+     */
+    public void startDownload(){
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               while (progress&amp;lt;100){
+                   //做了一些事情......进度更新了
+                   progress++;
+                   //发送广播
+                   Intent intent = new Intent(&amp;quot;xyz.xdzhcs.servicedomo.UPDATE_PROGRESS&amp;quot;);
+                   intent.putExtra(&amp;quot;progress&amp;quot;,progress);
+                   sendBroadcast(intent);
+                   try {
+                       Thread.sleep(1000);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }
+           }
+       }).start();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        startDownload();
+        return super.onStartCommand(intent, flags, startId);
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;package xyz.xdzhcs.servicedemo;
+
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private Intent intent;
+    private ProgressReceiver receiver;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        intent = new Intent(MainActivity.this,DownloadService.class);
+        receiver=new ProgressReceiver();
+        //注册广播接收器
+        IntentFilter filter=new IntentFilter();
+        filter.addAction(&amp;quot;xyz.xdzhcs.servicedomo.UPDATE_PROGRESS&amp;quot;);
+        registerReceiver(receiver,filter);
+        //开始下载
+        findViewById(R.id.btn_start_download).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this,&amp;quot;已经启动服务开始下载&amp;quot;,Toast.LENGTH_SHORT).show();
+                startService(intent);
+            }
+        });
+
+    }
+    /**
+     *  广播接收器
+     */
+    public class ProgressReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int progress = intent.getIntExtra(&amp;quot;progress&amp;quot;,0);
+            Toast.makeText(MainActivity.this,&amp;quot;当前进度为:&amp;quot;+progress,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+        stopService(intent);
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;效果和前面的差不多,在Activity中调用startService启动了Service以后，Service会马上在onStartCommand方法中调用startDownload。在progress数值更新以后，service发送广播，activity接收到广播并进行处理。
+这就实现了单向的从Service向Activity中发送信息了。那么如何从Activity想Service中发消息呢?这还不简单，在Service里注册广播接收器，从Activity发送广播，Service根据广播中附带的信息进行相应操作就好了。&lt;/p&gt;
+
+&lt;h3 id=&#34;小结&#34;&gt;小结&lt;/h3&gt;
+
+&lt;h5 id=&#34;使用binder通信&#34;&gt;使用binder通信&lt;/h5&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Activity&amp;ndash;&amp;gt;Service 通过 Activity通过Binder调用Service&lt;/li&gt;
+&lt;li&gt;Service&amp;ndash;&amp;gt;Activity 使用回调&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h5 id=&#34;使用广播通信&#34;&gt;使用广播通信&lt;/h5&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Activity &amp;lt;&amp;ndash;&amp;gt; Service 注册广播接收器，互发广播&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>你好,hugo</title>
+      <link>/post/first/</link>
+      <pubDate>Wed, 24 Aug 2016 21:13:10 +0800</pubDate>
+      
+      <guid>/post/first/</guid>
+      <description>
+
+&lt;h3 id=&#34;你好-hugo&#34;&gt;你好,hugo&lt;/h3&gt;
+
+&lt;p&gt;这是我的第一篇文章，好吧，测试文章。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
