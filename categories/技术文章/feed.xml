@@ -6,8 +6,379 @@
     <description>Recent content in 技术文章 on xdzhcs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 23 Oct 2016 11:50:52 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 30 Oct 2016 17:13:10 +0800</lastBuildDate>
     <atom:link href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/feed/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>实现可放缩移动的ImageView</title>
+      <link>/post/diy-zoom-imageview/</link>
+      <pubDate>Sun, 30 Oct 2016 17:13:10 +0800</pubDate>
+      
+      <guid>/post/diy-zoom-imageview/</guid>
+      <description>
+
+&lt;h2 id=&#34;可放缩可移动的imageview&#34;&gt;可放缩可移动的ImageView&lt;/h2&gt;
+
+&lt;p&gt;主要参考了&lt;br /&gt;
+&lt;a href=&#34;http://blog.csdn.net/lmj623565791/article/details/39474553&#34;&gt;http://blog.csdn.net/lmj623565791/article/details/39474553&lt;/a&gt;
+&lt;a href=&#34;http://blog.csdn.net/lmj623565791/article/details/39480503&#34;&gt;http://blog.csdn.net/lmj623565791/article/details/39480503&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;package xyz.xdzhcs.zoomanddrafting;
+
+import android.content.Context;
+import android.graphics.Matrix;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.support.v4.widget.DrawerLayout;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
+
+public class ZoomImageView extends ImageView implements ScaleGestureDetector.OnScaleGestureListener
+    ,ViewTreeObserver.OnGlobalLayoutListener
+{
+    //边缘不能触发触摸事件的距离，避免与其他布局（比如drawer_layout）的冲突
+    private static final int edge=20;
+    //最大放大倍数
+    private  static final float SCALE_MAX=4.0f;
+    //中间放大倍数
+    private static final float SCALE_MID=1.5f;
+    //初始化时的缩放比例，如果图片宽或者高大于屏幕，此值将小于1.0
+    private float initScale=1.0f;
+    //用于存放矩阵的9个值
+    private  float[] matrixValues=new float[9];
+    //缩放手势检测
+    private ScaleGestureDetector scaleGestureDetector;
+    //手势检测，只用来检测双击
+    private GestureDetector gestureDetector;
+    //变换矩阵
+    private Matrix matrix=new Matrix();
+    //首次加载标志
+    private boolean isFirst=true;
+    //是否正在放缩图片
+    private boolean isScaling=false;
+    //上次触摸事件发生时的触摸点数目
+    private int lastPointerCount=0;
+    //上次的x,y坐标
+    private float lastX=0.0f;
+    private float lastY=0.0f;
+
+    public ZoomImageView(Context context) {
+        //super(context);
+        this(context,null);
+    }
+
+
+    public ZoomImageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        super.setScaleType(ScaleType.MATRIX);
+        scaleGestureDetector = new ScaleGestureDetector(context,this);//this参  数是监听器
+        gestureDetector=new GestureDetector(new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                //return super.onDoubleTap(e);
+                Log.i(&amp;quot;info&amp;quot;,&amp;quot;onDoubleTap&amp;quot;);
+                float curScale=getScale();
+                if(curScale&amp;gt;=SCALE_MAX){
+                    //当前已经是最大的放大倍数了，双击后要缩小到初始化的大小
+                    ZoomImageView.this.postDelayed(new AutoScaleRunnable(initScale,getWidth()/2,getHeight()/2),16);
+                }else if(curScale&amp;gt;=SCALE_MID){
+                    //当前是中等放大倍数，双击后腰变到最大
+                    ZoomImageView.this.postDelayed(new AutoScaleRunnable(SCALE_MAX,getWidth()/2,getHeight()/2),16);
+                }else {
+                    //当前是初始化的放大倍数，双击后去到中等大小
+                    ZoomImageView.this.postDelayed(new AutoScaleRunnable(SCALE_MID,getWidth()/2,getHeight()/2),16);
+                }
+                isScaling=true;
+                //new Thread(new AutoScaleThread()).start();
+                return true;
+            }
+        });
+
+    }
+
+    /**
+     * 获取当前缩放系数
+     * @return
+     */
+    public float getScale(){
+        matrix.getValues(matrixValues);
+        return matrixValues[Matrix.MSCALE_X];
+    }
+
+    @Override
+    public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+        if(isScaling)return true;
+        float curScale = getScale(); //当前矩阵的缩放系数
+        float toScale = scaleGestureDetector.getScaleFactor();//想要进行的放缩系数
+
+        if(getDrawable()==null)
+            return true;
+
+        //缩放范围控制
+        if((curScale&amp;lt;SCALE_MAX&amp;amp;&amp;amp;toScale&amp;gt;1.0f)
+                ||(curScale&amp;gt;initScale&amp;amp;&amp;amp;toScale&amp;lt;1.0f)){
+            //最小值
+            if(toScale*curScale&amp;lt;initScale){
+                toScale=initScale/curScale;
+            }
+            //最大
+            if(toScale*curScale&amp;gt;SCALE_MAX){
+                toScale=SCALE_MAX/curScale;
+            }
+            //设置
+            matrix.postScale(toScale,toScale,getWidth()/2,getHeight()/2);
+            setImageMatrix(matrix);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+        return true;
+    }
+
+    @Override
+    public void onScaleEnd(ScaleGestureDetector scaleGestureDetector) {
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(event.getX()&amp;lt;edge||event.getY()&amp;lt;edge
+                ||event.getX()&amp;gt;getWidth()-edge||event.getY()&amp;gt;getHeight()-edge){
+            return false;
+        }
+        if(isScaling)return true;
+        if(gestureDetector.onTouchEvent(event)){
+            return true;
+        }
+
+        scaleGestureDetector.onTouchEvent(event);
+
+
+        if(getDrawable()==null){
+            return true;
+        }
+
+        float x=0;
+        float y=0;
+        int pointerCount=event.getPointerCount();
+        for(int i=0;i&amp;lt;pointerCount;i++){
+            x+=event.getX(i);
+            y+=event.getY(i);
+        }
+        x = x / pointerCount;
+        y = y / pointerCount;
+        //触摸点数目发生变化时，重置lastY,lastY，此次不滑动
+        if(pointerCount!=lastPointerCount){
+            lastX=x;
+            lastY=y;
+            lastPointerCount=pointerCount;
+            return true;
+        }
+        Log.i(&amp;quot;info&amp;quot;,&amp;quot;x:&amp;quot;+x+&amp;quot;y:&amp;quot;+y);
+        switch (event.getAction()){
+            case MotionEvent.ACTION_MOVE:
+                RectF rect=getMatrixRectF();
+                float dx=x-lastX;
+                float dy=y-lastY;
+                matrix.postTranslate(dx,dy);
+                checkPosition();
+                setImageMatrix(matrix);
+                Log.i(&amp;quot;info&amp;quot;,&amp;quot;dx:&amp;quot;+dx+&amp;quot;dy:&amp;quot;+dy);
+                break;
+            default:
+                break;
+        }
+        lastX=x;
+        lastY=y;
+        return true;
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        //以下代码的作用是指定初始放缩参数，即默认的放缩大小
+        if(isFirst){
+            Drawable d=getDrawable();
+            if(d==null){
+                return;
+            }
+
+            int picHeight=d.getIntrinsicHeight(); //图片内容高度
+            int picWidth=d.getIntrinsicWidth(); //图片内容宽度
+            int viewHeight=getHeight(); //View组件高度
+            int viewWidth=getWidth();   //View组件宽度
+            float scale=1.0f;
+            //如果图片内容的高大于屏幕的高，则缩放到屏幕的高
+            if(picHeight&amp;gt;viewHeight&amp;amp;&amp;amp;picWidth&amp;lt;=viewWidth){
+                scale=viewHeight*1.0f/picHeight;
+            }
+            //如果图片内容的宽大于屏幕的高，则缩放到屏幕的高
+            if(picWidth&amp;gt;viewWidth&amp;amp;&amp;amp;picHeight&amp;lt;=viewHeight){
+                scale=viewWidth*1.0f/picWidth;
+            }
+            //如果图片内容的宽和高都大于屏幕的宽和高，取宽和高最小的缩放指数
+            if(picHeight&amp;gt;viewHeight&amp;amp;&amp;amp;picWidth&amp;gt;viewWidth){
+                scale=Math.min(viewHeight*1.0f/picHeight,viewWidth*1.0f/picWidth);
+            }
+            initScale=scale;//初始放缩参数
+            Log.i(&amp;quot;info&amp;quot;,&amp;quot;initScale:&amp;quot;+initScale);
+            //matrix.postScale(initScale,initScale);
+
+            //把图片移动到view中心
+
+            matrix.postTranslate((viewWidth-picWidth)/2,(viewHeight-picHeight)/2);
+
+            RectF rect=getMatrixRectF();
+            matrix.setScale(initScale,initScale);
+            checkPosition();
+            setImageMatrix(matrix);
+            isFirst=false;
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    }
+
+    /**
+     * 在滑动滑动的时候，对图片显示范围进行控制
+     */
+    private void checkPosition(){
+
+        RectF rect=getMatrixRectF();
+        float dx=0;
+        float dy=0;
+
+        int viewHeight=getHeight(); //View组件高度
+        int viewWidth=getWidth();   //View组件宽度
+
+        //如果图片高大于View的高，不能出现白边
+        if(rect.height()&amp;gt;viewHeight){
+            if(rect.top&amp;gt;0){
+                dy=-rect.top;
+            }
+            if(rect.bottom&amp;lt;viewHeight){
+                dy=viewHeight-rect.bottom;
+            }
+        }
+        //如果图片宽大于View的宽，不能出现白边
+        if(rect.width()&amp;gt;viewWidth){
+            if(rect.left&amp;gt;0){
+                dx=-rect.left;
+            }
+            if(rect.right&amp;lt;viewWidth){
+                dx=viewWidth-rect.right;
+            }
+        }
+        //如果宽小于view的宽，居中
+        if(rect.width()&amp;lt;=viewWidth){
+            dx=viewWidth*0.5f-rect.right+rect.width()*0.5f;
+        }
+        //如果高小于viwe的高，居中
+        if(rect.height()&amp;lt;=viewHeight){
+            dy=viewHeight*0.5f-rect.bottom+rect.height()*0.5f;
+        }
+        matrix.postTranslate(dx,dy);
+    }
+
+    /**
+     * 获取图片图片内容形成的矩形
+     * @return
+     */
+    private RectF getMatrixRectF()
+    {
+        Matrix matrix = this.matrix;
+        RectF rect = new RectF();
+        Drawable d = getDrawable();
+        if (null != d)
+        {
+            rect.set(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+            matrix.mapRect(rect);
+        }
+        return rect;
+    }
+
+
+    /**
+     * 自动缩放的任务
+     */
+    private class AutoScaleRunnable implements Runnable
+    {
+        static final float BIGGER = 1.07f;
+        static final float SMALLER = 0.93f;
+        private float targetScale;
+        private float tmpScale;
+        /**
+         * 缩放的中心
+         */
+        private float x;
+        private float y;
+
+        /**
+         * 传入目标缩放值，根据目标值与当前值，判断应该放大还是缩小
+         * @param targetScale
+         */
+        public AutoScaleRunnable(float targetScale, float x, float y)
+        {
+            this.targetScale = targetScale;
+            this.x = x;
+            this.y = y;
+            if (getScale() &amp;lt; targetScale)
+            {
+                tmpScale = BIGGER;
+            } else
+            {
+                tmpScale = SMALLER;
+            }
+
+        }
+
+        @Override
+        public void run()
+        {
+            // 进行缩放
+            matrix.postScale(tmpScale, tmpScale, x, y);
+            checkPosition();
+            setImageMatrix(matrix);
+
+            final float currentScale = getScale();
+            // 如果值在合法范围内，继续缩放
+            if (((tmpScale &amp;gt; 1f) &amp;amp;&amp;amp; (currentScale &amp;lt; targetScale))
+                    || ((tmpScale &amp;lt; 1f) &amp;amp;&amp;amp; (targetScale &amp;lt; currentScale)))
+            {
+                ZoomImageView.this.postDelayed(this, 16);
+            } else
+            // 设置为目标的缩放比例
+            {
+                final float deltaScale = targetScale / currentScale;
+                matrix.postScale(deltaScale, deltaScale, x, y);
+                checkPosition();
+                setImageMatrix(matrix);
+                isScaling = false;
+            }
+
+        }
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
     
     <item>
       <title>activity与service的通信</title>
